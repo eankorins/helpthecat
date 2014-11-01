@@ -2,10 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.*;
 import java.util.List;
-import java.util.Random;
 
 /**
  * Created by edgars on 11/1/14.
@@ -16,18 +14,19 @@ public class Board extends JPanel{
     private List<Tile> tiles;
     private Tile tileA, tileB;
     private int boardWidth, boardHeight;
-    private int score, tilesLeft;
+    private int score, tileSize, tilesLeft;
     private List<Color> allowedColors;
 
     public static boolean clickLock;
 
 
-    public Board(int boardWidth, int boardHeight, Game game){
+    public Board(int boardWidth, int boardHeight, int tileSize, Game game){
         super(new GridLayout(boardWidth, boardHeight));
         this.game = game;
         this.boardWidth = boardWidth;
         this.boardHeight = boardHeight;
-        this.setPreferredSize(new Dimension(boardWidth * 75,boardHeight * 75));
+        this.tileSize = tileSize;
+        this.setMinimumSize(new Dimension(boardHeight * tileSize, boardWidth * tileSize));
         tiles = new ArrayList<Tile>();
         buildBoard();
     }
@@ -37,15 +36,24 @@ public class Board extends JPanel{
         int boardSize = boardWidth * boardHeight;
         tilesLeft = boardSize;
         Random rand = new Random();
-        int runs = boardSize / 2;
         int colorLength = allowedColors.size();
-        for(int i = 0; i < runs; i++){
-            Color c = allowedColors.get(rand.nextInt(colorLength));
+        int count = 0;
+
+        while(count < boardSize){
+            Color c = allowedColors.get(count % colorLength);
             Tile t = new Tile(c, 75);
             Tile t2 = new Tile(c, 75);
             tiles.add(t);
             tiles.add(t2);
+            count += 2;
         }
+        Collections.shuffle(tiles, rand);
+        Collections.shuffle(tiles, rand);
+        Collections.shuffle(tiles, rand);
+        Collections.shuffle(tiles, rand);
+        Collections.shuffle(tiles, rand);
+        Collections.shuffle(tiles, rand);
+
         for(Tile t : tiles){
             this.add(t);
         }
@@ -58,6 +66,9 @@ public class Board extends JPanel{
         allowedColors.add(Color.yellow);
         allowedColors.add(Color.orange);
         allowedColors.add(Color.pink);
+        allowedColors.add(Color.green);
+        allowedColors.add(Color.magenta);
+        allowedColors.add(Color.white);
     }
 
     public void click(Tile t){

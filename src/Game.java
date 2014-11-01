@@ -9,16 +9,20 @@ import java.awt.event.MouseListener;
 public class Game extends JFrame {
 
     Board board;
-    public Game(){
+    int width, height, tileSize;
+    public Game(int width, int height, int tileSize){
         super("Game");
+        this.width = width;
+        this.height = height;
+        this.tileSize = tileSize;
     }
 
 
     public void Initialize(){
 
-        board = new Board(4,4, this);
+        board = new Board(width, height, tileSize, this);
         this.setTitle("Game");
-        this.setMinimumSize(new Dimension(400, 400));
+        this.setMinimumSize(new Dimension(height * tileSize, width * tileSize));
         this.add(board);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -41,7 +45,7 @@ public class Game extends JFrame {
         EventQueue.invokeLater(new Runnable(){
             @Override
             public void run(){
-                Game g = new Game();
+                Game g = new Game(10,10, 100);
                 g.Initialize();
                 g.setVisible(true);
             }

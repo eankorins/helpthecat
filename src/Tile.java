@@ -18,14 +18,14 @@ public class Tile extends JButton{
         this.faceColor = faceColor;
         this.size = size;
         this.setBackground(baseColor);
-        this.setPreferredSize(new Dimension(size, size));
+        this.setMinimumSize(new Dimension(size, size));
 
         this.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(!Board.clickLock){
                     Tile t = (Tile)e.getSource();
-                    if(t.isClicked() || !t.isTaken()){
+                    if(!t.isClicked() && !t.isTaken()){
                         t.click();
                         Board board = (Board)t.getParent();
                         board.click(t);
@@ -45,15 +45,19 @@ public class Tile extends JButton{
     }
     public boolean isClicked(){ return clicked; }
     public void take(){
-        taken =true;
+        taken = true;
+        Color c = new Color(faceColor.getRed(), faceColor.getGreen(), faceColor.getBlue(), 200);
+        setBackground(c);
+        this.setEnabled(false);
     }
     public void click(){
         if(!clicked){
             this.setBackground(faceColor);
-
+            this.setEnabled(false);
         }
         else{
             this.setBackground(baseColor);
+            this.setEnabled(true);
         }
         clicked = !clicked;
     }
